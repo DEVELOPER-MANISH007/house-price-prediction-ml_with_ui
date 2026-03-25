@@ -65,6 +65,9 @@ def train():
     model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(housing_prepared, housing_labels)
 
+    # ensure models folder exists
+    os.makedirs(os.path.dirname(MODEL_FILE), exist_ok=True)
+    os.makedirs(os.path.dirname(PIPELINE_FILE), exist_ok=True)
     joblib.dump(model, MODEL_FILE)
     joblib.dump(pipeline, PIPELINE_FILE)
 
