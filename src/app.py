@@ -1,3 +1,4 @@
+import sys
 import os
 
 import joblib
@@ -14,6 +15,7 @@ st.set_page_config(
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "model.pkl")
 PIPELINE_PATH = os.path.join(BASE_DIR, "..", "models", "pipeline.pkl")
+sys.path.append(BASE_DIR)
 
 st.markdown(
     """
@@ -154,9 +156,13 @@ st.markdown(
 )
 
 if not os.path.exists(MODEL_PATH):
-    st.error("Model missing. Train first: `python src/main.py train`")
-    st.stop()
+    st.warning("⚡ Model not found. Training model... please wait")
 
+    with st.spinner("Training model..."):
+        from main import train
+        train()
+
+    st.success("✅ Model trained successfully!")
 model = joblib.load(MODEL_PATH)
 pipeline = joblib.load(PIPELINE_PATH)
 
